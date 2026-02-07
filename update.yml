@@ -1,0 +1,19 @@
+name: Auto Update Deals
+on:
+  schedule:
+    - cron: '0 * * * *' # รันทุกชั่วโมง
+  workflow_dispatch:
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Run Scraper
+        run: python scraper.py
+      - name: Save Data
+        run: |
+          git config --global user.name 'Bot'
+          git config --global user.email 'bot@bot.com'
+          git add data.json
+          git commit -m "Update deals" || exit 0
+          git push
